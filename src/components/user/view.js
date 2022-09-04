@@ -3,15 +3,10 @@ import { getUsers } from "./controller";
 import { success, error } from "../../utils/response";
 
 const router = express.Router();
-
 router.get("/", (req, res) => {
 	getUsers()
-		.then(users => {
-			success(res, users, 202);
-		})
-		.catch(err => {
-			error(res, err, 404);
-		});
+		.then(users => success(res, users, 202))
+		.catch(err => error(res, err, 404));
 });
 
 router.get("/admin", (req, res) => {
