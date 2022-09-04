@@ -1,5 +1,5 @@
-import userRouter from "../components/user/view";
+import studentRouter from "../views/studentView";
 
 export default app => {
-	app.use("/user", userRouter);
+	app.use("/student", studentRouter);
 };
