@@ -1,6 +1,6 @@
-import { getAll } from "./model";
+import { getAll } from "../models/model";
 
-export function getUsers() {
+export function getAll() {
 	return new Promise(async (resolve, reject) => {
 		const users = await getAll();
 		if (users) return resolve(users);

@@ -6,6 +6,7 @@ export const success = function (res, data, status, token = null) {
 		body: data,
 	});
 };
+
 export const error = function (res, data, status) {
 	res.setHeader("Content-Type", "application/json");
 	res.status(status).send({
