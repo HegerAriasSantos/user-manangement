@@ -6,7 +6,7 @@ function getAll() {
 			if (err) {
 				reject(err);
 			} else {
-				resolve(result);
+				resolve(result);	
 			}
 		});
 	});
