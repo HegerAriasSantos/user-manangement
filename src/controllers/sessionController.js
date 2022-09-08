@@ -82,3 +82,34 @@ export function Delete(req) {
     }
   });
 }
+
+export function getOne(req) {
+  return new Promise(async (resolve, reject) => {
+    const { params, query } = req;
+    const session = await Model.getOne(params.id);
+
+    if (session) {
+      resolve(session);
+    } else {
+      reject("Not session founds ");
+    }
+  });
+}
+
+export function Filter(req) {
+  return new Promise(async (resolve, reject) => {
+    const { body, query, params } = req;
+
+    const tableName = (query) => {
+      return query.toString().split("/")[1];
+    };
+
+    const dataToFilter = await Model.filter(tableName(req.url), query);
+
+    if (dataToFilter) {
+      resolve(dataToFilter);
+    } else {
+      reject("Error filtering datas");
+    }
+  });
+}

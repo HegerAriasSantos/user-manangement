@@ -75,9 +75,22 @@ const Delete = (id) => {
   });
 };
 
-const getByName = (name) => {
+const filter = (table, obj = {}) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM session WHERE name = ?", [name], (err, result) => {
+    let query = `SELECT * FROM ${table}`;
+    const keys = Object.entries(obj);
+
+    if (keys.length >= 1) {
+      query = `SELECT * FROM ${table} WHERE ${keys[0][0]} = ${keys[0][1]}`;
+      for (let index = 1; index < keys.length; index++) {
+        const key = keys[index][0];
+        const value = keys[index][1];
+        query += ` AND ${key} = ${value}`;
+        console.log(query);
+      }
+    }
+
+    db.query(query, [], (err, result) => {
       if (err) {
         reject(err);
       } else {
@@ -93,5 +106,5 @@ export default {
   getOne,
   update,
   Delete,
-  getByName,
+  filter,
 };
