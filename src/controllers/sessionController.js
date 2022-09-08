@@ -39,13 +39,13 @@ export function update(req) {
     if (!body.hour_start && !body.hour_end) {
       return reject("Data is required");
     }
-    if (!params.id && !query.id) {
+    if (!params.id && !body.id) {
       return reject("id is required");
     }
 
-    const sessionFound = await Model.getOne(query.id);
+    const sessionFound = await Model.getOne(params.id);
 
-    if (!sessionFound) return reject("Session not Found");
+    if (!sessionFound) return reject({ message: "Session not Found" });
 
     const session = { ...sessionFound[0] };
     if (body.hour_start) {
@@ -55,7 +55,7 @@ export function update(req) {
       session.hour_end = body.hour_end;
     }
 
-    const sessionUpdated = await Model.update(session, query.id);
+    const sessionUpdated = await Model.update(session, params.id);
     if (sessionUpdated) {
       resolve(session);
     } else {
