@@ -1,8 +1,22 @@
+import { filter } from "../models/filter";
+import studentTable from "../entities/student";
 import Model from "../models/studentModel";
+import checkProperties from "../utils/checkProperties";
 
-export function getAll() {
+export function get(req) {
 	return new Promise(async (resolve, reject) => {
-		const students = await Model.getAll();
+		const { query } = req;
+		const queriesWrong = checkProperties(studentTable.columns, query);
+		if (queriesWrong.length >= 1) {
+			return reject({
+				error: {
+					message: "Theses queries are wrong",
+					queriesWrong,
+				},
+				code: 400,
+			});
+		}
+		const students = await filter(studentTable.tableName, query);
 		if (students.length > 0) {
 			resolve(students);
 		} else {
@@ -34,7 +48,9 @@ export function update(req) {
 		if (!body.name && !body.class_room_id) return reject("data is required");
 		if (!query.id) return reject("id is required");
 
-		const studentFound = await Model.getOne(query.id);
+		const studentFound = await filter(studentTable.tableName, {
+			id: query.id,
+		});
 
 		if (!studentFound) return reject("Student not found");
 

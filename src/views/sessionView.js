@@ -1,11 +1,10 @@
 import express from "express";
 import {
-  getAll,
-  create,
-  update,
-  Delete,
-  Filter,
-  getOne,
+	get,
+	create,
+	update,
+	Delete,
+	getOne,
 } from "../controllers/sessionController";
 import { success, error } from "../utils/response";
 
@@ -18,32 +17,32 @@ const router = express.Router();
 // });
 
 router.get("/", (req, res) => {
-  getAll()
-    .then((session) => success(res, session, 200))
-    .catch((err) => error(res, err, 404));
+	get(req)
+		.then(session => success(res, session, 200))
+		.catch(err => error(res, err, 404));
 });
 
 router.get("/:id", (req, res) => {
-  getOne(req)
-    .then((session) => success(res, session, 200))
-    .catch((err) => error(res, err, 404));
+	getOne(req)
+		.then(session => success(res, session, 200))
+		.catch(err => error(res, err, 404));
 });
 
 router.post("/", (req, res) => {
-  create(req.body)
-    .then((session) => success(res, session, 201))
-    .catch((err) => err(res, err, 500));
+	create(req.body)
+		.then(session => success(res, session, 201))
+		.catch(err => err(res, err, 500));
 });
 
 router.patch("/:id", (req, res) => {
-  update(req)
-    .then((session) => success(res, session, 201))
-    .catch((err) => error(res, err, 500));
+	update(req)
+		.then(session => success(res, session, 201))
+		.catch(err => error(res, err, 500));
 });
 router.delete("/:id", (req, res) => {
-  Delete(req)
-    .then((session) => success(res, session, 201))
-    .catch((err) => error(res, err, 500));
+	Delete(req)
+		.then(session => success(res, session, 201))
+		.catch(err => error(res, err, 500));
 });
 
 //filter
