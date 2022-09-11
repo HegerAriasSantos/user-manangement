@@ -17,6 +17,7 @@ export function get(req) {
 			});
 		}
 		const sessions = filter(sessionTable.tableName, query);
+		console.log(sessions);
 		if (sessions.length > 0) {
 			resolve(sessions);
 		} else {
