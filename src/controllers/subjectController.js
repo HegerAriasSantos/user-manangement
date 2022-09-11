@@ -4,30 +4,32 @@ import checkProperties from "../utils/checkProperties";
 import { filter } from "../models/filter";
 
 export function get(req) {
-  return new Promise(async(resolve, reject) => {
-    const { query } = req;
-	console.log(query);
+	return new Promise(async (resolve, reject) => {
+		const { query } = req;
 
-    const wrongQuery = checkProperties(subjectTable.columns, query);
-	console.log(wrongQuery);
-    if (wrongQuery.length > 0) {
-      reject({
-        error: {
-          message: "Theses queries are wrong",
-          wrongQuery,
-        },
-        code: 400,
-      });
-    }
+		const wrongQuery = checkProperties(subjectTable.columns, query);
+		if (wrongQuery.length > 0) {
+			return reject({
+				error: {
+					message: "Theses queries are wrong",
+					wrongQuery,
+				},
+				code: 400,
+			});
+		}
 
-    const subject = await filter(subjectTable.tableName, query);
-	console.log(subject);
-    if (subject.length > 0) {
-      resolve(subject);
-    } else {
-      reject("subject not found");
-    }
-  });
+		const subject = await filter(subjectTable.tableName, query);
+		if (subject.length > 0) {
+			resolve(subject);
+		} else {
+			reject({
+				error: {
+					message: "Subject not found",
+				},
+				code: 404,
+			});
+		}
+	});
 }
 
 export function create(body) {
@@ -37,7 +39,7 @@ export function create(body) {
 		}
 
 		const subject = {
-			name : body.name
+			name: body.name,
 		};
 		const subjectCreated = await Model.create(subject);
 		if (subjectCreated) {
@@ -55,16 +57,16 @@ export function update(req) {
 			return reject("Name is required");
 		}
 		if (!params.id && !body.id) {
-			return reject("id is required");    
+			return reject("id is required");
 		}
 
 		const subjectFound = await Model.getOne(params.id);
 
-		if (!subjectFound) return reject({ message: "subject not Found" });
+		if (!subjectFound) return reject("subject not Found");
 
 		const subject = { ...subjectFound[0] };
 		if (body.name) {
-			subject.name = body.name
+			subject.name = body.name;
 		}
 
 		const subjectUpdated = await Model.update(subject, params.id);

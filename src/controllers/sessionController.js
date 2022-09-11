@@ -50,7 +50,7 @@ export function create(body) {
 
 export function update(req) {
 	return new Promise(async (resolve, reject) => {
-		const { body, query, params } = req;
+		const { body, params } = req;
 		if (!body.hour_start && !body.hour_end) {
 			return reject("Data is required");
 		}
@@ -107,24 +107,6 @@ export function getOne(req) {
 			resolve(session);
 		} else {
 			reject("Not session founds ");
-		}
-	});
-}
-
-export function Filter(req) {
-	return new Promise(async (resolve, reject) => {
-		const { body, query, params } = req;
-
-		const tableName = query => {
-			return query.toString().split("/")[1];
-		};
-
-		const dataToFilter = await Model.filter(tableName(req.url), query);
-
-		if (dataToFilter) {
-			resolve(dataToFilter);
-		} else {
-			reject("Error filtering datas");
 		}
 	});
 }

@@ -10,16 +10,10 @@ import { success, error } from "../utils/response";
 
 const router = express.Router();
 
-// router.get("/", (req, res) => {
-//   Filter(req)
-//     .then((session) => success(res, session, 200))
-//     .catch((err) => error(res, err, 404));
-// });
-
 router.get("/", (req, res) => {
 	get(req)
 		.then(session => success(res, session, 200))
-		.catch(err => error(res, err, 404));
+		.catch(err => error(res, err.error, err.code));
 });
 
 router.get("/:id", (req, res) => {

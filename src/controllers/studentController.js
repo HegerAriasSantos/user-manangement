@@ -17,10 +17,15 @@ export function get(req) {
 			});
 		}
 		const students = await filter(studentTable.tableName, query);
-		if (students.length > 0) {
+		if (students.length >= 1) {
 			resolve(students);
 		} else {
-			reject("Not students found");
+			reject({
+				error: {
+					message: "Not students found",
+				},
+				code: 404,
+			});
 		}
 	});
 }
