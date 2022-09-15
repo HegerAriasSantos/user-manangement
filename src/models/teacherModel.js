@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db";
 
-const Teacher = sequelize.define("teacher", {
+const Model = sequelize.define("teacher", {
 	name: DataTypes.TEXT,
 	active: {
 		type: DataTypes.BOOLEAN,
@@ -16,5 +16,6 @@ const Teacher = sequelize.define("teacher", {
 		defaultValue: "Aun activo",
 	},
 });
+Model.columns = Object.keys(Model.prototype.rawAttributes);
 
-export default Teacher;
+export default Model;

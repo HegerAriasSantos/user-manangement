@@ -6,7 +6,7 @@ import checkProperties from "../utils/checkProperties.js";
 export function get(req) {
 	return new Promise(async (resolve, reject) => {
 		const { query } = req;
-		const queriesWrong = checkProperties(teacherTable.columns, query);
+		const queriesWrong = checkProperties(Model.columns, query);
 		if (queriesWrong.length >= 1) {
 			return reject({
 				error: {
