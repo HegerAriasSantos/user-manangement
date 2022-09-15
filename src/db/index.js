@@ -1,15 +1,20 @@
-import mysql from "mysql";
+const { Sequelize, Model, DataTypes } = require("sequelize");
 
-const con = mysql.createConnection({
+const sequelize = new Sequelize("technical_test", "root", "", {
 	host: "localhost",
-	user: "root",
-	password: "",
-	database: "technical_test",
+	dialect: "mysql",
 });
 
-con.connect(err => {
-	if (err) throw err;
-	console.log("Connected!");
-});
-
-export default con;
+const connect = async () => {
+	try {
+		await sequelize.authenticate();
+		console.log("Connection has been established successfully.");
+	} catch (error) {
+		console.error("Unable to connect to the database:", error);
+	}
+};
+connect();
+(async () => {
+	await sequelize.sync();
+})();
+export default sequelize;

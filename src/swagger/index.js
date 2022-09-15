@@ -12,7 +12,7 @@ export default app => {
 					url: "https://swagger.io/support/",
 					email: "",
 				},
-				servers: ["http://localhost:4000"],
+				servers: [`http://localhost:${process.env.PORT || 4000}`],
 				version: "1.0.0",
 				license: {
 					name: "MIT",
@@ -25,5 +25,9 @@ export default app => {
 	};
 
 	const swaggerDocs = swaggerJs(swaggerOptions);
-	app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+	app.use(
+		"/api-docs",
+		swaggerUi.serve,
+		swaggerUi.setup(swaggerDocs, { explorer: true }),
+	);
 };

@@ -3,24 +3,14 @@ import { get, create, update, Delete } from "../controllers/studentController";
 import { success, error } from "../utils/response";
 
 const router = express.Router();
+
 /**
- * @swagger
- * /student:
- *  get:
- *   summary: Get all students
- *   description: Use to request all students
- *   produces:
- *   - application/json
- *
- *  responses:
- *   200:
- *    description: A successful response
- *    schema:
- *    type: json
- *
- *
- *
+  @swagger
+  tags:
+    name: Books
+    description: API to manage your books.
  */
+
 router.get("/", (req, res) => {
 	get(req)
 		.then(users => success(res, users, 200))

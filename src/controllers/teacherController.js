@@ -16,8 +16,10 @@ export function get(req) {
 				code: 400,
 			});
 		}
-		const teachers = await filter(teacherTable.tableName, query);
-		if (teachers.length > 0) {
+		const teachers = await Model.findAll({
+			where: query,
+		});
+		if (teachers) {
 			resolve(teachers);
 		} else {
 			reject("not teacher found");
@@ -30,18 +32,12 @@ export function create(body) {
 		if (!body.name) {
 			return reject("Name is required");
 		}
-
-		const teacher = {
+		const teacherCreate = await Model.create({
 			name: body.name,
-			active: 1,
-			create: Date.now(),
-			deleted: "aun Activo",
-		};
-
-		const teacherCreate = await Model.create(teacher);
+		});
 
 		if (teacherCreate) {
-			resolve(teacher);
+			resolve(teacherCreate.toJSON());
 		} else {
 			reject("Error creating student");
 		}
@@ -51,21 +47,17 @@ export function update(req) {
 	return new Promise(async (resolve, reject) => {
 		const { body, query } = req;
 
-		if (!body.name && !body.active) return reject("data is required");
+		if (!body.name) return reject("data is required");
 		if (!query.id) return reject("id is required");
 
-		const teacherFound = await Model.getOne(query.id);
+		const teacherUpdated = await Model.update(
+			{ name: body.name },
+			{ where: { id: query.id } },
+		);
+		const teacherFound = await Model.findOne({ where: { id: query.id } });
 
-		if (!teacherFound) return reject("Teacher not found");
-
-		const teacher = { ...teacherFound[0] };
-
-		if (body.name) teacher.name = body.name;
-		if (body.active) teacher.active = body.active;
-
-		const teacherUpdated = await Model.update(teacher, query.id);
 		if (teacherUpdated) {
-			resolve(teacher);
+			resolve(teacherFound);
 		} else {
 			reject("Error updating teacher");
 		}
@@ -75,24 +67,21 @@ export function update(req) {
 export function Delete(req) {
 	return new Promise(async (resolve, reject) => {
 		const { params } = req;
-		console.log(params.id);
 		if (!params) {
 			return reject("id is required");
 		}
-		const teacherFound = await Model.getOne(params.id);
-		console.log(teacherFound);
-		if (!teacherFound) return reject("teacher not found");
-
-		const teacher = { ...teacherFound[0] };
-
-		teacher.date_deleted = Date.now();
-		teacher.active = 0;
-
-		console.log(teacher);
-		const teacherDelete = Model.Delete(teacher);
+		const teacherDelete = await Model.update(
+			{ date_deleted: Date.now().toString(), active: 0 },
+			{
+				where: {
+					id: params.id,
+				},
+			},
+		);
+		console.log(teacherDelete);
 
 		if (teacherDelete) {
-			resolve(teacherFound);
+			resolve(teacherDelete);
 		} else {
 			reject("Error deleting teacher");
 		}
